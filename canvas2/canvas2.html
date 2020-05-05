@@ -1,0 +1,121 @@
+<html>
+<body>
+<canvas width="400" height="200" id="canvas">
+</canvas>
+
+<script>
+
+    let play;
+
+    function draw() {
+        if (canvas.getContext) {
+            const canvas = document.getElementById('canvas');
+            const clown = canvas.getContext('2d');
+            const clownEye1 = canvas.getContext("2d");
+            const clownEye2 = canvas.getContext("2d");
+            const clownSmile1 = canvas.getContext("2d");
+            const clownSmile2 = canvas.getContext("2d");
+            const clownNose = canvas.getContext("2d");
+            const clownBrows = canvas.getContext("2d");
+            const clownHair = canvas.getContext("2d");
+
+            clownHair.beginPath();
+            clownHair.moveTo(178, 35);
+            clownHair.arc(178, 35, 10, 0, 2 * Math.PI);
+            clownHair.moveTo(175, 35);
+            clownHair.arc(165, 35, 10, 0, 2 * Math.PI);
+            clownHair.moveTo(168, 40);
+            clownHair.arc(158, 40, 10, 0, 2 * Math.PI);
+            clownHair.moveTo(160, 50);
+            clownHair.arc(150, 50, 10, 0, 2 * Math.PI);
+
+            clownHair.moveTo(222, 35);
+            clownHair.arc(222, 35, 10, 0, 2 * Math.PI);
+            clownHair.moveTo(225, 35);
+            clownHair.arc(235, 35, 10, 0, 2 * Math.PI);
+            clownHair.moveTo(232, 40);
+            clownHair.arc(242, 40, 10, 0, 2 * Math.PI);
+            clownHair.moveTo(240, 50);
+            clownHair.arc(250, 50, 10, 0, 2 * Math.PI);
+            clownHair.stroke();
+            clownHair.fillStyle = '#ff3300';
+            clownHair.fill();
+            clownHair.restore();
+
+            clown.beginPath();
+            clown.arc(200, 75, 50, 0, 2 * Math.PI, true);
+            clown.fillStyle = '#fdfeed';
+            clown.fill();
+            clown.stroke();
+            clown.restore();
+
+            clownEye1.beginPath();
+            clownEye1.moveTo(191, 60);
+            clownEye1.ellipse(185, 60, 6, 9, 0, 0, 2 * Math.PI);
+            clownEye1.moveTo(220, 60);
+            clownEye1.ellipse(214, 60, 6, 9, 0, 0, 2 * Math.PI);
+            clownEye1.fillStyle = '#ffffff';
+            clownEye1.fill();
+            clownEye1.strokeStyle = '#2d7ed9';
+            clownEye1.stroke();
+            clownEye1.restore();
+
+            clownEye2.beginPath();
+            clownEye2.moveTo(187, 60);
+            clownEye2.ellipse(185, 60, 2, 3, 0, 0, 2 * Math.PI);
+            clownEye2.moveTo(216, 60);
+            clownEye2.ellipse(214, 60, 2, 3, 0, 0, 2 * Math.PI);
+            clownEye2.fillStyle = '#000000';
+            clownEye2.fill();
+            clownEye2.strokeStyle = '#000000';
+            clownEye2.stroke();
+            clownEye2.restore();
+
+            clownSmile1.beginPath();
+            clownSmile1.lineWidth = 8;
+            clownSmile1.moveTo(220, 90);
+            clownSmile1.arc(200, 90, 20, 0, Math.PI);
+            clownSmile1.lineCap = 'round';
+            clownSmile1.strokeStyle = '#ff3300';
+            clownSmile1.stroke();
+            clownSmile1.restore();
+
+            clownSmile2.beginPath();
+            clownSmile2.lineWidth = 2;
+            clownSmile2.moveTo(220, 90);
+            clownSmile2.arc(200, 90, 20, 0, Math.PI);
+            clownSmile2.lineCap = 'round';
+            clownSmile2.strokeStyle = '#ffffff';
+            clownSmile2.stroke();
+            clownSmile2.restore();
+
+            clownNose.beginPath();
+            clownNose.arc(200, 78, 8, 0, 2 * Math.PI, true);
+            clownNose.fillStyle = '#ff3300';
+            clownNose.fill();
+            clownNose.restore();
+
+            clownBrows.beginPath();
+            clownBrows.arc(185, 45, 4, Math.PI, 2 * Math.PI);
+            clownBrows.moveTo(210, 45);
+            clownBrows.arc(214, 45, 4, Math.PI, 2 * Math.PI);
+            clownBrows.strokeStyle = '#000000';
+            clownBrows.stroke();
+            clownBrows.restore();
+        }
+
+    }
+
+    //funkcja uruchamiana w momencie, gdy ktos kliknie na Play.
+    //Funkcja ta ustawia parametry startowe aplikacji
+    //oraz uruchamia timer na co 40 milisekund
+    //50ms daje juz wrazenie plynnosci wynoszace 25 FPS
+    function play(){
+        play = setInterval('draw()', 40);
+    }
+
+
+</script>
+<button onClick="play()">Play</button>
+</body>
+</html>

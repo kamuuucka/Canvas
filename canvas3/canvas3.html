@@ -1,0 +1,89 @@
+<html>
+<body>
+<canvas id="canvas">
+</canvas>
+<style>
+    canvas{
+        background-image: url("6653305_preview.png");
+        background-repeat: no-repeat;
+        #background-size: cover;
+        position: relative;
+    }
+</style>
+
+<script>
+    canvas.setAttribute('width', window.innerWidth);
+    canvas.setAttribute('height', window.innerHeight);
+    var x,y,toX,toY;
+    var direction_X, direction_Y;
+    var play ;
+    var image=new Image();
+    image.src="ball.png";
+    function draw() {
+        const canvas = document.getElementById('canvas');
+        if (canvas.getContext) {
+            const c = canvas.getContext('2d');
+            const size = canvas.width * 0.06;
+
+            if (x > canvas.width || y > canvas.height){
+                alert('Za duze dane!');
+            }
+
+            c.beginPath();
+            c.fillStyle = 'image';
+            c.clearRect(0,0,canvas.width, canvas.height);
+            c.drawImage(image,x,y,size, size);
+
+            if (x > canvas.width - size)
+            {
+                direction_X="left";
+            }
+            else if (x<=0){
+                direction_X="right";
+            }
+
+            if (y > canvas.height - size){
+                direction_Y="up";
+            }
+            else if (y <= 0){
+                direction_Y="down";
+            }
+
+            if (direction_X=="right"){
+                x+=toX;
+
+            }
+            else if (direction_X=="left"){
+                x-=toX;
+            }
+
+            if (direction_Y=="up"){
+                y-=toY;
+            }
+            else if (direction_Y=="down"){
+                y+=toY;
+            }
+        }
+    }
+    function play(){
+        y = parseInt(document.getElementById('y').value);
+        x = parseInt(document.getElementById('x').value);
+        toY = parseInt(document.getElementById('to_y').value);
+        toX = parseInt(document.getElementById('to_x').value);
+        direction_Y="down";
+        direction_X="right";
+        play = setInterval('draw()',40);
+    }
+
+    function stop(){
+       clearInterval(play);
+    }
+
+
+</script>
+<button onClick="play()">Play</button>
+<button onClick="stop()">Stop</button>
+<input type="text" id="x" placeholder="X" /> <input type="text" id="y" placeholder="Y" />
+<input type="text" id="to_x" placeholder="To X"/> <input type="text" id="to_y" placeholder="To Y"/>
+</body>
+</html>

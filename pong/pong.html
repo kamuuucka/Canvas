@@ -1,0 +1,113 @@
+<html>
+<body>
+<canvas width="300" height="200" id="canvas">
+</canvas>
+<style>
+    canvas{
+        background-image: url("background.png");
+        background-repeat: no-repeat;
+        background-size: cover;
+    }
+</style>
+<script>
+
+    canvas.setAttribute('width', window.innerWidth-20);
+    canvas.setAttribute('height', window.innerHeight-50);
+    var ballX, ballY;
+    var pozX, pozY; //mouse
+    var rocketX, rocketY;
+    var xSpeed, ySpeed;
+    var xDirection, yDirection;
+    var image=new Image();
+    image.src="rocket.png";
+    function draw()
+    {
+        const canvas = document.getElementById('canvas');
+        if (canvas.getContext)
+        {
+            const c = canvas.getContext('2d');
+            rocketX = pozX-50;
+            rocketY = canvas.height-100;
+            rocketE = pozX+50;
+
+            c.clearRect(0,0,canvas.width,canvas.height);
+            c.fillStyle = '#f01fc3';
+            c.fillRect(ballX,ballY,10,10);
+            //c.fillRect(rocketX, rocketY, 100, 60);
+            c.drawImage(image,rocketX,rocketY,100,60);
+
+            //ODBICIA OD PALETKI
+            if (ballY>=rocketY+24 && ballY<=rocketY+30 && ballX>=rocketX+10 && ballX<=rocketX+25)
+            {
+                xSpeed = 3;
+                yDirection = "Up";
+                xDirection = "Left";
+            }
+            if (ballY>=rocketY+24 && ballY<=rocketY+30 && ballX>=rocketX+25 && ballX<=rocketE-25)
+            {
+                yDirection = "Up";
+                xSpeed = 1;
+            }
+            if (ballY>=rocketY+24 && ballY<=rocketY+30 && ballX>=rocketE-25 && ballX<=rocketE-10)
+            {
+                xSpeed = 3;
+                yDirection = "Up";
+                xDirection = "Right";
+            }
+
+            //ODBICIA OD KRAWĘDZI
+            if (ballX > canvas.width - 10) xDirection = "Left";
+            if (ballX<=0) xDirection = "Right";
+            //if (ballY > canvas.height - 10) yDirection = "Up";
+            if (ballY <= 0) yDirection = "Down";
+
+            //KONIEC GRY
+            if (ballY>rocketY+60)
+            {
+                alert("The end");
+                stop();
+            }
+
+            //PORUSZANIE PILKI
+            if (xDirection==="Right") ballX+=xSpeed;
+            else if (xDirection==="Left") ballX-=xSpeed;
+            if (yDirection==="Up") ballY-=ySpeed;
+            else if (yDirection==="Down") ballY+=ySpeed;
+        }
+    }
+    function play()
+    {
+        xDirection = "Right";
+        yDirection = "Down";
+        ballX=0;
+        ballY=0;
+        xSpeed = 1;
+        ySpeed = 2;
+        play = setInterval('draw()',10);
+    }
+    function pozycjaMyszki(e)
+    {
+        pozX = 0;
+        pozY = 0;
+        if (!e) var e = window.event;
+        if (e.pageX || e.pageY) {
+            pozX = e.pageX;
+            pozY = e.pageY;
+        } else if (e.clientX || e.clientY) {
+            pozX = e.clientX + document.body.scrollLeft;
+            pozY = e.clientY + document.body.scrollTop;
+        }
+        document.getElementById("text").innerHTML=pozX;
+        document.getElementById("text2").innerHTML=pozY;
+        return {pozX,pozY}
+    }
+    document.onmousemove = function(e){
+        pozycjaMyszki(e);
+    }
+    function stop(){
+        clearInterval(play);
+    }
+</script>
+<button onClick="play()">Play</button>
+</body>
+</html>
