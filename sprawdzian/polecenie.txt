@@ -1,0 +1,14 @@
+W ramach sprawdzianu proszę o wykonanie animacji:
+- najpierw losowana jest pozycja na ekranie na tarczę strzelniczą,
+w tej pozycji wstaw za pomocą instrukcji canvasowych obraz takiej tarczy (np png)
+- na środku okna canvas narysuj własny czołg (nie z tekstury) z napisem na wieży 102, na burcie Twoje imie,
+- czołg może być prosty typu trzy prostokąty, może być też bardziej złożony (wpływa najmocniej na ocenę)
+- czołg niech w animacji porusza się po ekranie w dowolny sposób (może być jak w pongu), zawsze lufą poziomo do ekranu,
+- gdy trafi sobą w tarcze, kończy się animacja.
+
+To na pięć, ale jest też możliwość oceny 6.
+Czas jest dłuższy, bo do 24 godziny dzisiaj.
+- czołg jest ładniejszy, dopracowany, ma kształty z łukami, może uchylony właz wejściowy, dodatkowe zbiorniki paliwa itp.
+- czołg, gdy jeździ CZASAMI np co 4 sekundy obraca wieżę w lewo-prawo,
+- gdy tarcza pojawi się na linii strzału, wtedy rysuj przy lufie teksturę strzału i kończymy grę,
+pomyśl co to znaczy linia strzału w myśl poprzednich założeń

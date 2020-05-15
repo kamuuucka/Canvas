@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Kamila Matuszak 3B</title>
+</head>
+<body>
+<canvas id="canvas">
+</canvas>
+<script>
+
+    canvas.setAttribute('width', window.innerWidth-20);
+    canvas.setAttribute('height', window.innerHeight-50);
+
+    var targetX = randomInt(0,canvas.width-100);
+    var targetY = randomInt(0,canvas.height-100);
+    var centerX = canvas.width / 2;
+    var centerY = canvas.height / 2;
+    var tankX, tankY, cabinX, cabinY, pipeX, pipeY, nameX, nameY, numberX, numberY;
+    tankX = centerX - 60;
+    tankY = centerY - 20;
+    cabinX = centerX - 40;
+    cabinY = centerY - 50;
+    pipeX = centerX+40;
+    pipeY = centerY-40;
+    nameX = centerX - 50;
+    nameY = centerY;
+    numberX = centerX + 120;
+    numberY = centerY - 30;
+    var xSpeed, ySpeed;
+    var xDirection, yDirection, lDirection;
+    var image=new Image();
+    image.src="target.png";
+    function draw()
+    {
+        const canvas = document.getElementById('canvas');
+        if (canvas.getContext)
+        {
+            const c = canvas.getContext('2d');
+            const g = canvas.getContext('2d');
+            const wheel = canvas.getContext('2d');
+            const t = canvas.getContext('2d');
+
+            c.clearRect(0,0,canvas.width,canvas.height);
+            c.drawImage(image,targetX,targetY,100,100);
+            //RYSOWANIE CZOLGU
+            c.fillStyle = '#75a181';
+            c.fillRect(cabinX,cabinY,80,30);
+            c.fillStyle = 'transparent';
+            c.fillRect(tankX,tankY,120,60);
+            c.fillStyle = '#485e4e';
+            c.fillRect(tankX,tankY,120,45);
+            g.beginPath();
+            g.fillStyle = '#000000';
+            g.ellipse(tankX+60,tankY+50,65,20,0 ,0,Math.PI * 2);
+            g.fill();
+            c.font = "10px Arial";
+            c.fillStyle = '#ffffff';
+            c.fillText("KAMILA", nameX, nameY);
+            t.beginPath();
+            t.fillStyle = '#ffffff';
+            t.moveTo(tankX-2,tankY);
+            t.lineTo(tankX-2,tankY+20);
+            t.lineTo(tankX+20,tankY);
+            t.moveTo(cabinX-2,cabinY);
+            t.lineTo(cabinX-2,cabinY+10);
+            t.lineTo(cabinX+10,cabinY);
+            t.moveTo(tankX+100,tankY);
+            t.lineTo(tankX+122,tankY+20);
+            t.lineTo(tankX+122,tankY);
+            t.moveTo(cabinX+72,cabinY);
+            t.lineTo(cabinX+82,cabinY+10);
+            t.lineTo(cabinX+82,cabinY);
+            t.fill();
+            wheel.beginPath();
+            wheel.fillStyle = '#757575';
+            wheel.arc(tankX+11, tankY+50, 10, 0, 2 * Math.PI);
+            wheel.arc(tankX+41, tankY+50, 16, 0, 2 * Math.PI);
+            wheel.arc(tankX+79, tankY+50, 16, 0, 2 * Math.PI);
+            wheel.arc(tankX+109, tankY+50, 10, 0, 2 * Math.PI);
+            wheel.fill();
+
+            //LUFA
+            if (lDirection==="Right"){
+                c.fillStyle = '#485e4e';
+                c.fillRect(pipeX,pipeY,100,15);
+                c.font = "10px Arial";
+                c.fillStyle = '#ffffff';
+                c.fillText("102", numberX, numberY);
+                if (pipeX<targetX && ((pipeY<=targetY+80 && pipeY>=targetY+20)||(pipeY+15<=targetY+80 && pipeY+15>=targetY+20))){
+                    c.fillStyle = '#f5e025';
+                    c.fillRect(pipeX+100,pipeY-4,30,23);
+                    c.fillStyle = '#f5af0c';
+                    c.fillRect(pipeX+108,pipeY,22,15);
+                    c.fillStyle = '#eb4e10';
+                    c.fillRect(pipeX+102,pipeY+4,14,7);
+                    stop();
+                    alert("The end");
+                }
+            }
+            else {
+                c.fillStyle = '#485e4e';
+                c.fillRect(pipeX-180,pipeY,100,15);
+                c.font = "10px Arial";
+                c.fillStyle = '#ffffff';
+                c.fillText("102", pipeX-170, numberY);
+                if (pipeX>targetX && ((pipeY<=targetY+80 && pipeY>=targetY+20)||(pipeY+15<=targetY+80 && pipeY+15>=targetY+20))){
+                    c.fillStyle = '#f5e025';
+                    c.fillRect(pipeX-210,pipeY-4,30,23);
+                    c.fillStyle = '#f5af0c';
+                    c.fillRect(pipeX-206,pipeY,22,15);
+                    c.fillStyle = '#eb4e10';
+                    c.fillRect(pipeX-202,pipeY+4,14,7);
+                    stop();
+                    alert("The end");
+                }
+            }
+
+
+
+
+            //ODBICIA OD KRAWĘDZI
+            if (tankX > canvas.width - 120) xDirection = "Left";
+            if (tankX<=0) xDirection = "Right";
+            if (tankY > canvas.height - 60) yDirection = "Up";
+            if (cabinY <= 0) yDirection = "Down";
+
+            //KONIEC GRY
+            if (
+                //KADLUB
+                ((tankY>=targetY-60 && tankY<=targetY+90) && ((tankX<=targetX+100 && tankX>=targetX) || (tankX+120>=targetX && tankX+120<=targetX+100)))
+                || //KABINA
+                ((cabinY>=targetY-30 && cabinY<=targetY+90) && ((cabinX<=targetX+100 && cabinX>=targetX) || (cabinX+80>=targetX && cabinX+80<=targetX+100)))
+            )
+            {
+                stop();
+                alert("The end");
+            }
+
+            //PORUSZANIE CZOLGU
+            if (xDirection==="Right")
+            {
+                tankX+=xSpeed;
+                cabinX+=xSpeed;
+                pipeX+=xSpeed;
+                numberX+=xSpeed;
+                nameX+=xSpeed;
+            }
+            else if (xDirection==="Left")
+            {
+                tankX-=xSpeed;
+                cabinX-=xSpeed;
+                pipeX-=xSpeed;
+                numberX-=xSpeed;
+                nameX-=xSpeed;
+            }
+            if (yDirection==="Up")
+            {
+                tankY-=ySpeed;
+                cabinY-=ySpeed;
+                pipeY-=ySpeed;
+                numberY-=ySpeed;
+                nameY-=ySpeed;
+            }
+            else if (yDirection==="Down")
+            {
+                tankY+=ySpeed;
+                cabinY+=ySpeed;
+                pipeY+=ySpeed;
+                numberY+=ySpeed;
+                nameY+=ySpeed;
+            }
+        }
+    }
+    function lufa(){
+        if (lDirection === "Right") lDirection = "Left";
+        else lDirection = "Right";
+    }
+
+    function play()
+    {
+        xDirection = "Right";
+        yDirection = "Down";
+        lDirection = "Right";
+        xSpeed = 1;
+        ySpeed = 2;
+        play = setInterval('draw()',10);
+        setInterval('lufa()',4000);
+    }
+    function randomInt(min, max) {
+        return min + Math.floor((max - min) * Math.random());
+    }
+    function stop(){
+        clearInterval(play);
+    }
+</script>
+<button onClick="play()">Play</button>
+</body>
+</html>
