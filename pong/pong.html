@@ -13,13 +13,55 @@
 
     canvas.setAttribute('width', window.innerWidth-20);
     canvas.setAttribute('height', window.innerHeight-50);
-    var ballX, ballY;
-    var pozX, pozY; //mouse
-    var rocketX, rocketY;
-    var xSpeed, ySpeed;
-    var xDirection, yDirection;
-    var image=new Image();
-    image.src="rocket.png";
+    let ballX, ballY;
+    let pozX, pozY; //mouse
+    let rocketX, rocketY;
+    let blockW, blockH;
+    let xSpeed, ySpeed;
+    let xDirection, yDirection;
+    let rocket=new Image();
+    let ball = new Image();
+    rocket.src = "rocket.png";
+    ball.src = "ball.png";
+
+    function getRandomIntInclusive(min, max) {
+        min = Math.ceil(min);
+        max = Math.floor(max);
+        return Math.floor(Math.random() * (max - min + 1)) + min;
+    }
+
+    const t2D = new Array(5);
+    for (let i = 0; i < 5; i++) t2D[i] = new Array(10);
+
+    for (let y=0; y < 5; y++){
+        for (let x=0;x<10;x++){
+            t2D[y][x] = getRandomIntInclusive(0, 2);
+        }
+    }
+
+    function checkBlock(xBlock, yBlock, ballX, ballY, spaceX, spaceY) {
+        if (ballX >= ((xBlock * blockW) + spaceX) && ballX <= ((xBlock * blockW) + spaceX + blockW)
+            && ballY >= (yBlock*blockH) + spaceY && ballY <= (yBlock*blockH) + spaceY + blockH) {
+            return 1;
+        } else {
+            return 0;
+        }
+    }
+    function changeDirection(){
+        if (xDirection === "Left" && yDirection === "Up"){
+            xDirection = "Left";
+            yDirection = "Down";
+        } else if (xDirection === "Left" && yDirection === "Down"){
+            xDirection = "Left";
+            yDirection = "Up";
+        } else if (xDirection === "Right" && yDirection === "Up"){
+            xDirection = "Right";
+            yDirection = "Down";
+        } else if (xDirection === "Left" && yDirection === "Down"){
+            xDirection = "Left";
+            yDirection = "Up";
+        }
+    }
     function draw()
     {
         const canvas = document.getElementById('canvas');
@@ -29,26 +71,60 @@
             rocketX = pozX-50;
             rocketY = canvas.height-100;
             rocketE = pozX+50;
+            blockW = (canvas.width/10)-10;
+            blockH = (canvas.height/20)-10;
 
             c.clearRect(0,0,canvas.width,canvas.height);
             c.fillStyle = '#f01fc3';
-            c.fillRect(ballX,ballY,10,10);
-            //c.fillRect(rocketX, rocketY, 100, 60);
-            c.drawImage(image,rocketX,rocketY,100,60);
+            c.drawImage(ball,ballX,ballY,20,20);
+            c.drawImage(rocket,rocketX,rocketY,100,60);
+
+            let spaceY = 10;
+            //RYSOWANIE BLOKÓW
+            for (let y = 0; y < 5; y++){
+                let spaceX = 10;
+                for (let x = 0; x < 10; x++){
+                    switch (t2D[y][x]){
+                        case 1:
+                            break;
+                        case 2:
+                            break;
+                        default:
+                            break;
+                    }
+                    if (t2D[y][x] === 1){
+                        c.fillStyle = "yellow";
+                        c.fillRect((x*blockW)+spaceX,(y*blockH)+spaceY,blockW,blockH);
+                        if (checkBlock(x,y,ballX,ballY,spaceX,spaceY)===1){
+                            changeDirection();
+                        }
+                    }
+                    else if (t2D[y][x] === 2){
+                        c.fillStyle = "red";
+                        c.fillRect((x*blockW)+spaceX,(y*blockH)+spaceY,blockW,blockH);
+                        if (checkBlock(x,y,ballX,ballY,spaceX,spaceY)===1){
+                            changeDirection();
+                            t2D[y][x]=0;
+                        }
+                    }
+                    spaceX+=10;
+                }
+                spaceY+=10;
+            }
 
             //ODBICIA OD PALETKI
-            if (ballY>=rocketY+24 && ballY<=rocketY+30 && ballX>=rocketX+10 && ballX<=rocketX+25)
+            if (ballY>=rocketY+24 && ballY<=rocketY+50 && ballX>=rocketX+10 && ballX<=rocketX+25)
             {
                 xSpeed = 3;
                 yDirection = "Up";
                 xDirection = "Left";
             }
-            if (ballY>=rocketY+24 && ballY<=rocketY+30 && ballX>=rocketX+25 && ballX<=rocketE-25)
+            if (ballY>=rocketY+24 && ballY<=rocketY+50 && ballX>=rocketX+25 && ballX<=rocketE-25)
             {
                 yDirection = "Up";
                 xSpeed = 1;
             }
-            if (ballY>=rocketY+24 && ballY<=rocketY+30 && ballX>=rocketE-25 && ballX<=rocketE-10)
+            if (ballY>=rocketY+24 && ballY<=rocketY+50 && ballX>=rocketE-25 && ballX<=rocketE-10)
             {
                 xSpeed = 3;
                 yDirection = "Up";
@@ -58,7 +134,6 @@
             //ODBICIA OD KRAWĘDZI
             if (ballX > canvas.width - 10) xDirection = "Left";
             if (ballX<=0) xDirection = "Right";
-            //if (ballY > canvas.height - 10) yDirection = "Up";
             if (ballY <= 0) yDirection = "Down";
 
             //KONIEC GRY
@@ -80,7 +155,7 @@
         xDirection = "Right";
         yDirection = "Down";
         ballX=0;
-        ballY=0;
+        ballY=500;
         xSpeed = 1;
         ySpeed = 2;
         play = setInterval('draw()',10);
